@@ -4,7 +4,7 @@
 
 First, as per usual: clone this repository to wherever you want to work. *You want to work in this folder, with the contents of the clone.*
 
-If run `setup.sh` and have python installed, it should:
+If you run `setup.sh` and have python installed, it should:
 
 - Create a python venv called `.venv` in the workspace directory
 - Install `requests` into the venv
