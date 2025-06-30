@@ -6,7 +6,7 @@ python3 -m venv $fileDir/.venv
 
 source $fileDir/.venv/bin/activate
 
-pip install requests
+pip install -r $fileDir/requirements.txt
 
 $fileDir/.venv/bin/python $fileDir/setup.py
 
