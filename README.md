@@ -2,7 +2,7 @@
 
 ## Setup
 
-First, as per usual: clone this repository to wherever you want to work. *You want to work in this folder, with the contents of the clone.*
+First, as per usual: clone this repository to wherever you want to work. *You want to work in this folder, with the contents of the repository.*
 
 If you run `setup.sh` and have python installed, it should:
 
