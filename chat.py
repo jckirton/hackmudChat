@@ -31,6 +31,39 @@ def send(user: str, channel: str, msg: str) -> None:
     )
 
 
+def tell(user: str, target: str, msg: str) -> None:
+    """
+    Sends a message from the inputted user to the inputted target containing the inputted msg.
+
+    Args:
+        user (str): The user to send the message from.
+        target (str): The target to send the message to.
+        msg (str): The message to send.
+    """
+    import requests
+    import json
+    from sys import path
+
+    with open(f"{path[0]}/config.json") as f:
+        config: dict = json.load(f)
+
+    token: str = config["chat_token"]
+    header: dict = config["header"]
+
+    payload = {
+        "chat_token": token,
+        "username": user,
+        "tell": target,
+        "msg": msg,
+    }
+
+    requests.post(
+        url="https://www.hackmud.com/mobile/create_chat.json",
+        headers=header,
+        json=payload,
+    )
+
+
 def read(
     users: list[str], before: int | float = None, after: int | float = None
 ) -> dict:
