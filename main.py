@@ -1,3 +1,3 @@
-import chat
+from chat import ChatAPI
 
-chat.send("user", "channel", "message")
+chat = ChatAPI()

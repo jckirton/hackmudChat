@@ -17,7 +17,7 @@ When you need to update these, just run `setup.py` again.
 
 ## Usage
 
-Make sure to have `import chat` at the beginning of every python file. This will give you the two functions; `chat.read` and `chat.send`. They both have documentation.
+Make sure to have `from chat import ChatAPI` at the beginning of every python file. This will give you the `ChatAPI` class, which you want to make an instance of.
 
 ## Snippets
 
