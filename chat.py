@@ -149,7 +149,7 @@ class ChatAPI:
     def save_config(self):
         import json
 
-        with open("config.json", "w") as f:
+        with open(self.config_file, "w") as f:
             json.dump(self.config, f, indent=4)
 
     def get_token(self, chat_pass: str | None = None) -> None:
