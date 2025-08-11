@@ -248,8 +248,8 @@ class ChatAPI:
     def read(
         self,
         *,
-        after: int | float = 60,
-        before: int | float = 0,
+        after: int | float | None = 60,
+        before: int | float | None = None,
         users: list[str] = None,
     ) -> dict:
         """
@@ -275,8 +275,8 @@ class ChatAPI:
         payload = {
             "chat_token": self.token,
             "usernames": users,
-            "before": (now - before),
-            "after": (now - after),
+            "before": ((now - before) if before else None),
+            "after": ((now - after) if after else None),
         }
 
         chats: dict = json.loads(
