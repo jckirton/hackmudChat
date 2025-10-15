@@ -142,8 +142,6 @@ class ChatAPI:
             self.config["ErrorOnBadToken"] = True
             self.save_config()
 
-        self.badTokenError: bool = self.config["ErrorOnBadToken"]
-
         self.header: dict = self.config.get("header", None)
 
         if self.header is None:
@@ -209,7 +207,7 @@ class ChatAPI:
         self.load_config()
 
         if badToken:
-            if self.badTokenError:
+            if self.config["ErrorOnBadToken"]:
                 raise ConnectionError(f"Bad chat API token - {BTReason}")
             else:
                 print("Requesting new token.")
