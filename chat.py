@@ -128,23 +128,62 @@ class ChatAPI:
             self.load_config()
         except FileNotFoundError:
 
-            self.config = {"header": {"Content-Type": "application/json"}}
+            self.config = {
+                "ErrorOnBadToken": False,
+                "header": {"Content-Type": "application/json"},
+            }
             self.save_config()
             self.load_config()
 
             self.get_token()
             self.get_users()
 
-        self.header: dict = self.config["header"]
-        self.token: str = self.config["chat_token"]
+        if self.config.get("ErrorOnBadToken", None) is None:
+            self.config["ErrorOnBadToken"] = True
+            self.save_config()
+
+        self.badTokenError: bool = self.config["ErrorOnBadToken"]
+
+        self.header: dict = self.config.get("header", None)
+
+        if self.header is None:
+            self.config["header"] = {"Content-Type": "application/json"}
+            self.header = self.config.get("header", None)
+            self.save_config()
+
+        self.token: str = self.config.get("chat_token", None)
+
+        if self.token is None:
+            print("No chat API token present in config.")
+            self.get_token(
+                badToken=True, BTReason="no chat API token present in config."
+            )
+
+        self.test_token()
+
         self.users = self.get_users()
+
+    def test_token(self):
+        import requests
+
+        response = requests.post(
+            url="https://www.hackmud.com/mobile/account_data.json",
+            headers=self.header,
+            json={"chat_token": self.token},
+        ).content
+
+        if response == b"":
+            print("Token invalid.")
+            self.get_token(badToken=True)
 
     def load_config(self):
         import json
 
         with open(self.config_file) as f:
             self.config: dict = json.load(f)
-            self.header: dict = self.config["header"]
+            self.header: dict = self.config.get(
+                "header", {"Content-Type": "application/json"}
+            )
 
     def save_config(self):
         import json
@@ -152,7 +191,12 @@ class ChatAPI:
         with open(self.config_file, "w") as f:
             json.dump(self.config, f, indent=4)
 
-    def get_token(self, chat_pass: str | None = None) -> None:
+    def get_token(
+        self,
+        chat_pass: str | None = None,
+        badToken: bool = False,
+        BTReason: str = "reason unknown.",
+    ) -> None:
         """
         Gets a chat API token from the inputted chat_pass, which is obtained from running "chat_pass" in-game.
 
@@ -164,17 +208,32 @@ class ChatAPI:
 
         self.load_config()
 
+        if badToken:
+            if self.badTokenError:
+                raise ConnectionError(f"Bad chat API token - {BTReason}")
+            else:
+                print("Requesting new token.")
+
         if not chat_pass:
             chat_pass = input("chat_pass password: ")
 
         if chat_pass != "":
-            self.token = json.loads(
-                requests.post(
-                    url="https://www.hackmud.com/mobile/get_token.json",
-                    headers={"Content-Type": "application/json"},
-                    json={"pass": chat_pass},
-                ).content
-            )["chat_token"]
+            while True:
+                token = json.loads(
+                    requests.post(
+                        url="https://www.hackmud.com/mobile/get_token.json",
+                        headers=self.header,
+                        json={"pass": chat_pass},
+                    ).content
+                ).get("chat_token", None)
+
+                if token is not None:
+                    self.token = token
+                    break
+                else:
+                    print("Invalid chat_pass.")
+                    chat_pass = input("chat_pass password: ")
+
             self.config["chat_token"] = self.token
 
             self.save_config()
