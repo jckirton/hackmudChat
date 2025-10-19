@@ -120,13 +120,19 @@ class ChatAPI:
     # import json
     from sys import path
 
-    def __init__(self, config_file: str = f"{path[0]}/config.json"):
+    def __init__(
+        self, config_file: str = f"{path[0]}/config.json", token_refresh: bool = False
+    ):
+        self.token_refresh = token_refresh
         self.config_file = config_file
         self.config: dict
 
         try:
             self.load_config()
         except FileNotFoundError:
+
+            print(f'Config file not found at "{self.config_file}".')
+            print(f'Creating new config file at "{self.config_file}".')
 
             self.config = {
                 "ErrorOnBadToken": False,
@@ -236,6 +242,9 @@ class ChatAPI:
 
             self.save_config()
 
+            if self.token_refresh:
+                quit()
+
     def get_users(self) -> list[str]:
         import requests
         import json
@@ -304,7 +313,7 @@ class ChatAPI:
 
     def read(
         self,
-        *,
+        /,
         after: int | float | None = 60,
         before: int | float | None = None,
         users: list[str] = None,
