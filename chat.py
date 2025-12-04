@@ -119,6 +119,7 @@ class ChatAPI:
     # import requests
     # import json
     from sys import path
+    from requests import Response
 
     def __init__(
         self, config_file: str = f"{path[0]}/config.json", token_refresh: bool = False
@@ -273,7 +274,7 @@ class ChatAPI:
 
         return list(self.config["users"].keys())
 
-    def send(self, user: str, channel: str, msg: str) -> None:
+    def send(self, user: str, channel: str, msg: str) -> Response:
         """
         Sends a message from the inputted user to the inputted channel containing the inputted msg.
 
@@ -291,13 +292,13 @@ class ChatAPI:
             "msg": msg,
         }
 
-        requests.post(
+        return requests.post(
             url="https://www.hackmud.com/mobile/create_chat.json",
             headers=self.header,
             json=payload,
         )
 
-    def tell(self, user: str, target: str, msg: str) -> None:
+    def tell(self, user: str, target: str, msg: str) -> Response:
         """
         Sends a message from the inputted user to the inputted target containing the inputted msg.
 
@@ -315,7 +316,7 @@ class ChatAPI:
             "msg": msg,
         }
 
-        requests.post(
+        return requests.post(
             url="https://www.hackmud.com/mobile/create_chat.json",
             headers=self.header,
             json=payload,
