@@ -1,5 +1,19 @@
 # hackmud Python Chat API
 
+## ARCHIVAL NOTICE
+
+***This reposity is no longer the place where this is being worked on.***
+
+I am now developing this as a Python module published on PyPi, with the source code avaliable at [jckirton/hackmudChatBackage](https://github.com/jckirton/hackmudChatPackage).
+
+This repository will not be deleted for archival reasons, but it will not recieve new features from me.
+
+If you are using this currently, you can change to the new version by installing it to your venv with `pip install hackmudChatAPI`, and changing all your `from chat import ChatAPI` to `from hackmudChatAPI import ChatAPI`.
+
+It should be fully backwards compatible with the *class based* implementation present here (i.e., old configs are accepted and will be updated, methods take the same arguments and behave largely the same).
+
+It is ***NOT*** backwards compatible with the function based implementation (importing/using the fuctions directly).
+
 ## Setup
 
 First, as per usual: clone this repository to wherever you want to work. *You want to work in this folder, with the contents of the repository.*
